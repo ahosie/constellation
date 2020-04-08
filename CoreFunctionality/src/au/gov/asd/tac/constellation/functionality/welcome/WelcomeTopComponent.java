@@ -18,7 +18,6 @@ package au.gov.asd.tac.constellation.functionality.welcome;
 import au.gov.asd.tac.constellation.functionality.CorePluginRegistry;
 import au.gov.asd.tac.constellation.functionality.browser.OpenInBrowserPlugin;
 import au.gov.asd.tac.constellation.functionality.welcome.plugins.AddModeWelcomePlugin;
-import au.gov.asd.tac.constellation.functionality.welcome.plugins.WelcomePlugin;
 import au.gov.asd.tac.constellation.plugins.PluginExecution;
 import au.gov.asd.tac.constellation.security.ConstellationSecurityManager;
 import au.gov.asd.tac.constellation.security.proxy.ProxyUtilities;
@@ -145,7 +144,7 @@ public final class WelcomeTopComponent extends TopComponent {
 
                             final String href = ((Element) event.getTarget()).getAttribute("href");
                             if (href != null && !href.isEmpty()) {
-                                Lookup.getDefault().lookupAll(WelcomePlugin.class).forEach(plugin -> {
+                                Lookup.getDefault().lookupAll(WelcomePageProvider.class).forEach(plugin -> {
                                     if (plugin.getName().equals(href)) {
                                         plugin.run();
                                     }
@@ -194,9 +193,11 @@ public final class WelcomeTopComponent extends TopComponent {
         buf.append("Constellation is a pretty cool platform, you can create graphs and stuff.<br><br>");
         buf.append("To get started you first need to get started. You do this through an internet spider.<br><br>");
         
-        Lookup.getDefault().lookupAll(WelcomePlugin.class).forEach(plugin -> {
-            buf.append(plugin.getLink());
-            buf.append("<br><br>");
+        Lookup.getDefault().lookupAll(WelcomePageProvider.class).forEach(plugin -> {
+            if (plugin.isVisible()) {
+                buf.append(plugin.getLink());
+                buf.append("<br><br>");
+            }
         });
         buf.append("</body></html>");
 

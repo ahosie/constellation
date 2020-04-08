@@ -13,31 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package au.gov.asd.tac.constellation.functionality.welcome.plugins;
+package au.gov.asd.tac.constellation.plugins.importexport;
 
 import au.gov.asd.tac.constellation.functionality.welcome.WelcomePageProvider;
-import au.gov.asd.tac.constellation.graph.Graph;
-import au.gov.asd.tac.constellation.graph.StoreGraph;
-import au.gov.asd.tac.constellation.graph.file.opener.GraphOpener;
-import au.gov.asd.tac.constellation.graph.locking.DualGraph;
-import au.gov.asd.tac.constellation.graph.schema.Schema;
-import au.gov.asd.tac.constellation.graph.schema.SchemaFactoryUtilities;
-import au.gov.asd.tac.constellation.graph.schema.analytic.AnalyticSchemaFactory;
-import au.gov.asd.tac.constellation.graph.schema.visual.concept.VisualConcept;
 import au.gov.asd.tac.constellation.plugins.PluginInfo;
+import au.gov.asd.tac.constellation.plugins.importexport.delimited.DelimitedFileImporterStage;
+import javafx.application.Platform;
 import org.openide.util.NbBundle;
 import org.openide.util.lookup.ServiceProvider;
 
+
 /**
- * The New Graph in Add Mode plugin for the Welcome Page.
+ * The Open Delimited File plugin for the Welcome Page.
  *
  * @author canis_majoris
  */
-
 @ServiceProvider(service = WelcomePageProvider.class)
 @PluginInfo(tags = {"WELCOME"})
-@NbBundle.Messages("AddModeWelcomePlugin=Add Mode Welcome Plugin")
-public class AddModeWelcomePlugin extends WelcomePageProvider {
+@NbBundle.Messages("DelimitedFileWelcomePlugin=Delimited File Welcome Plugin")
+public class DelimitedFileWelcomePlugin extends WelcomePageProvider {
 
     /**
      * Get a unique reference that is used to identify the plugin 
@@ -46,7 +40,7 @@ public class AddModeWelcomePlugin extends WelcomePageProvider {
      */
     @Override
     public String getName() {
-        return AddModeWelcomePlugin.class.getName();
+        return DelimitedFileWelcomePlugin.class.getName();
     }
     
     /**
@@ -56,7 +50,7 @@ public class AddModeWelcomePlugin extends WelcomePageProvider {
      */
     @Override
     public String getDescription() {
-        return "Open up a new graph and put it into Add Mode";
+        return "Open the Delimited File Importer";
     }
     
     /**
@@ -75,16 +69,10 @@ public class AddModeWelcomePlugin extends WelcomePageProvider {
      */
     @Override
     public void run() {
-        final Schema schema = SchemaFactoryUtilities.getSchemaFactory(AnalyticSchemaFactory.ANALYTIC_SCHEMA_ID).createSchema();
-        final StoreGraph sg = new StoreGraph(schema);
-        schema.newGraph(sg);
-        int drawModeAttribute = VisualConcept.GraphAttribute.DRAWING_MODE.ensure(sg);
-        sg.setBooleanValue(drawModeAttribute, 0, true);
-        final Graph dualGraph = new DualGraph(sg, false);
-
-        final String graphName = SchemaFactoryUtilities.getSchemaFactory(AnalyticSchemaFactory.ANALYTIC_SCHEMA_ID).getLabel().replace(" ", "").toLowerCase();
-        GraphOpener.getDefault().openGraph(dualGraph, graphName);
-
+        Platform.runLater(() -> {
+            final DelimitedFileImporterStage stage = new DelimitedFileImporterStage();
+            stage.show();
+        });      
     }
 
     /**

@@ -13,22 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package au.gov.asd.tac.constellation.functionality.welcome.plugins;
-
-import au.gov.asd.tac.constellation.graph.GraphReadMethods;
-import au.gov.asd.tac.constellation.graph.GraphWriteMethods;
-import au.gov.asd.tac.constellation.plugins.AbstractPlugin;
-import au.gov.asd.tac.constellation.plugins.PluginException;
-import au.gov.asd.tac.constellation.plugins.PluginGraphs;
-import au.gov.asd.tac.constellation.plugins.PluginInteraction;
-import au.gov.asd.tac.constellation.plugins.parameters.PluginParameters;
+package au.gov.asd.tac.constellation.functionality.welcome;
 
 /**
  * A plugin designed to be supported by the Welcome Page.
  *
  * @author canis_majoris
  */
-public abstract class WelcomePlugin extends AbstractPlugin {
+public abstract class WelcomePageProvider {
     /**
      * Get a unique reference that is used to identify the plugin 
      *
@@ -44,7 +36,13 @@ public abstract class WelcomePlugin extends AbstractPlugin {
      * @return a link address
      */
     public String getLink() {
-        return null;
+        StringBuilder href = new StringBuilder();
+        href.append("<a href=\"");
+        href.append(getName());
+        href.append("\">");
+        href.append(getDescription());
+        href.append("</a>");
+        return href.toString();
     }
     
     /**
@@ -81,20 +79,5 @@ public abstract class WelcomePlugin extends AbstractPlugin {
      */
     public boolean isVisible() {
         return true;
-    }
-    
-    @Override
-    public void run(PluginGraphs graphs, PluginInteraction interaction, PluginParameters parameters) throws InterruptedException, PluginException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void run(GraphWriteMethods graph, PluginInteraction interaction, PluginParameters parameters) throws InterruptedException, PluginException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void run(GraphReadMethods graph, PluginInteraction interaction, PluginParameters parameters) throws InterruptedException, PluginException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }
