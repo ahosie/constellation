@@ -50,13 +50,33 @@ public class AddModeWelcomePlugin extends WelcomePageProvider {
     }
     
     /**
-     * Get a textual description that appears on the Welcome Page.
+     * Get a description for the link that will appear on the Welcome Page 
+     *
+     * @return a unique reference
+     */
+    @Override
+    public String getLinkDescription() {
+        return "Open up a new graph and put it into Add Mode";
+    }
+    
+    /**
+     * Get an optional textual description that appears on the Welcome Page.
      *
      * @return a unique reference
      */
     @Override
     public String getDescription() {
-        return "Open up a new graph and put it into Add Mode";
+        StringBuilder buf = new StringBuilder();
+        buf.append("<br>");
+        buf.append("Add mode allows you to draw your own graph by clicking on ");
+        buf.append("the background.<br>");
+        buf.append("By connecting on nodes, you can connect them with links.<br>");
+        buf.append("The side menu contains options for toggling whether the links ");
+        buf.append("are directed.<br>");
+        buf.append("When finished drawing, you can toggle the graph back into Selection ");
+        buf.append("Mode by clicking the button on the side menu, changing the attribute ");
+        buf.append("in the Attribute Editor, or by toggling Draw Mode in the Edit Menu.");
+        return buf.toString();
     }
     
     /**

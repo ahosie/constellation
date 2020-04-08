@@ -44,13 +44,29 @@ public class DelimitedFileWelcomePlugin extends WelcomePageProvider {
     }
     
     /**
-     * Get a textual description that appears on the Welcome Page.
+     * Get a description for the link that will appear on the Welcome Page 
+     *
+     * @return a unique reference
+     */
+    @Override
+    public String getLinkDescription() {
+        return "Open the Delimited File Importer";
+    }
+    
+    /**
+     * Get an optional textual description that appears on the Welcome Page.
      *
      * @return a unique reference
      */
     @Override
     public String getDescription() {
-        return "Open the Delimited File Importer";
+        StringBuilder buf = new StringBuilder();
+        buf.append("<br>");
+        buf.append("The Delimited File Importer is a way you can transform your tabular ");
+        buf.append("into something that can be represented as a graph.<br>");
+        buf.append("Specify whether columns represent source node, destination node, or ");
+        buf.append("link/transaction attributes and the table will be imported.");
+        return buf.toString();
     }
     
     /**

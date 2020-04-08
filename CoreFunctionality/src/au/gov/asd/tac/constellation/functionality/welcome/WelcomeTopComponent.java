@@ -186,8 +186,13 @@ public final class WelcomeTopComponent extends TopComponent {
         buf.append(String.format("<style>body{font-size:%spx;}</style>", FontUtilities.getOutputFontSize()));
 
         buf.append("<h2>Welcome to Constellation</h2><br>");
-        buf.append("Constellation is a pretty cool platform, you can create graphs and stuff.<br><br>");
-        buf.append("To get started you first need to get started. You do this through an internet spider.<br><br>");
+        buf.append("Constellation is first class domain agnostic visualisation and data analysis ");
+        buf.append("application enabling the user to solve large and complex problems ");
+        buf.append("in a simple and intuitive way.<br><br>");
+        buf.append("Constellation is a graph focused visualisation and data analysis ");
+        buf.append("application enabling data access, federation and manipulation ");
+        buf.append("activities across large and complex datasets.<br><br>");
+        buf.append("Below are some options for getting started:<br><br>");
         
         Lookup.getDefault().lookupAll(WelcomePageProvider.class).forEach(plugin -> {
             if (plugin.isVisible()) {

@@ -31,6 +31,15 @@ public abstract class WelcomePageProvider {
     }
     
     /**
+     * Get a description for the link that will appear on the Welcome Page 
+     *
+     * @return a unique reference
+     */
+    public String getLinkDescription() {
+        return null;
+    }
+    
+    /**
      * Get a link to appear on the Welcome Page
      *
      * @return a link address
@@ -40,18 +49,19 @@ public abstract class WelcomePageProvider {
         href.append("<a href=\"");
         href.append(getName());
         href.append("\">");
-        href.append(getDescription());
+        href.append(getLinkDescription());
         href.append("</a>");
+        href.append(getDescription());
         return href.toString();
     }
     
     /**
-     * Get a textual description that appears on the Welcome Page.
+     * Get an optional textual description that appears on the Welcome Page.
      *
      * @return a unique reference
      */
     public String getDescription() {
-        return null;
+        return "";
     }
     
     /**
