@@ -16,19 +16,14 @@
 package au.gov.asd.tac.constellation.functionality.welcome.plugins;
 
 import au.gov.asd.tac.constellation.functionality.welcome.WelcomePageProvider;
-import au.gov.asd.tac.constellation.graph.file.open.OpenFile;
-import au.gov.asd.tac.constellation.graph.file.open.FileChooser;
+import au.gov.asd.tac.constellation.graph.StoreGraph;
+import au.gov.asd.tac.constellation.graph.file.GraphPluginRegistry;
+import au.gov.asd.tac.constellation.plugins.PluginException;
+import au.gov.asd.tac.constellation.plugins.PluginExecution;
 import au.gov.asd.tac.constellation.plugins.PluginInfo;
-import java.io.File;
-import javax.swing.JFileChooser;
-import org.openide.filesystems.FileUtil;
-import org.openide.loaders.DataObject;
-import org.openide.util.HelpCtx;
+import org.openide.util.Exceptions;
 import org.openide.util.NbBundle;
-import org.openide.util.UserCancelException;
 import org.openide.util.lookup.ServiceProvider;
-import org.openide.windows.TopComponent;
-import org.openide.windows.WindowManager;
 
 /**
  * The Open Graph plugin for the Welcome Page.
@@ -41,12 +36,6 @@ import org.openide.windows.WindowManager;
 @NbBundle.Messages("OpenGraphWelcomePlugin=Open Graph Welcome Plugin")
 public class OpenGraphWelcomePlugin extends WelcomePageProvider {
     
-    /**
-     * stores the last current directory of the file chooser
-     */
-    private static File currentDirectory = null;
-    private static boolean running;
-
     /**
      * Get a unique reference that is used to identify the plugin 
      *
@@ -83,24 +72,11 @@ public class OpenGraphWelcomePlugin extends WelcomePageProvider {
      */
     @Override
     public void run() {
-        if (running) {
-            return;
-        }
+        final StoreGraph sg = new StoreGraph();
         try {
-            running = true;
-            JFileChooser chooser = prepareFileChooser();
-            File[] files;
-            try {
-                files = chooseFilesToOpen(chooser);
-                currentDirectory = chooser.getCurrentDirectory();
-            } catch (UserCancelException ex) {
-                return;
-            }
-            for (int i = 0; i < files.length; i++) {
-                OpenFile.openFile(files[i], -1);
-            }
-        } finally {
-            running = false;
+            PluginExecution.withPlugin(GraphPluginRegistry.OPEN_FILE).executeNow(sg);
+        } catch (InterruptedException | PluginException ex) {
+            Exceptions.printStackTrace(ex);
         }
 
     }
@@ -113,68 +89,5 @@ public class OpenGraphWelcomePlugin extends WelcomePageProvider {
     @Override
     public boolean isVisible() {
         return true;
-    }
-    
-    private HelpCtx getHelpCtx() {
-        return new HelpCtx(this.getClass().getName());
-    }
-    
-    /**
-     * Creates and initializes a file chooser.
-     *
-     * @return the initialized file chooser
-     */
-    protected JFileChooser prepareFileChooser() {
-        JFileChooser chooser = new FileChooser();
-        chooser.setCurrentDirectory(getCurrentDirectory());
-        HelpCtx.setHelpIDString(chooser, getHelpCtx().getHelpID());
-
-        return chooser;
-    }
-    
-    /**
-     * Displays the specified file chooser and returns a list of selected files.
-     *
-     * @param chooser file chooser to display
-     * @return array of selected files,
-     * @exception org.openide.util.UserCancelException if the user cancelled the
-     * operation
-     */
-    public static File[] chooseFilesToOpen(final JFileChooser chooser)
-            throws UserCancelException {
-        File[] files;
-        do {
-            int selectedOption = chooser.showOpenDialog(
-                    WindowManager.getDefault().getMainWindow());
-
-            if (selectedOption != JFileChooser.APPROVE_OPTION) {
-                throw new UserCancelException();
-            }
-            files = chooser.getSelectedFiles();
-        } while (files.length == 0);
-        return files;
-    }
-    
-    private static File getCurrentDirectory() {
-        if (Boolean.getBoolean("netbeans.openfile.197063")) {
-            // Prefer to open from parent of active editor, if any.
-            TopComponent activated = TopComponent.getRegistry().getActivated();
-            if (activated != null && WindowManager.getDefault().isOpenedEditorTopComponent(activated)) {
-                DataObject d = activated.getLookup().lookup(DataObject.class);
-                if (d != null) {
-                    File f = FileUtil.toFile(d.getPrimaryFile());
-                    if (f != null) {
-                        return f.getParentFile();
-                    }
-                }
-            }
-        }
-        // Otherwise, use last-selected directory, if any.
-        if (currentDirectory != null && currentDirectory.exists()) {
-            return currentDirectory;
-        }
-        // Fall back to default location ($HOME or similar).
-        currentDirectory = new File(System.getProperty("user.home"));  // algol
-        return currentDirectory;
     }
 }
