@@ -13,31 +13,33 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package au.gov.asd.tac.constellation.functionality.welcome.plugins;
+package au.gov.asd.tac.constellation.testing;
 
 import au.gov.asd.tac.constellation.functionality.welcome.WelcomePageProvider;
 import au.gov.asd.tac.constellation.graph.Graph;
 import au.gov.asd.tac.constellation.graph.StoreGraph;
 import au.gov.asd.tac.constellation.graph.file.opener.GraphOpener;
+import au.gov.asd.tac.constellation.graph.interaction.InteractiveGraphPluginRegistry;
 import au.gov.asd.tac.constellation.graph.locking.DualGraph;
 import au.gov.asd.tac.constellation.graph.schema.Schema;
 import au.gov.asd.tac.constellation.graph.schema.SchemaFactoryUtilities;
 import au.gov.asd.tac.constellation.graph.schema.analytic.AnalyticSchemaFactory;
-import au.gov.asd.tac.constellation.graph.schema.visual.concept.VisualConcept;
+import au.gov.asd.tac.constellation.plugins.PluginExecutor;
 import au.gov.asd.tac.constellation.plugins.PluginInfo;
+import au.gov.asd.tac.constellation.testing.construction.SphereGraphBuilderPlugin;
 import org.openide.util.NbBundle;
 import org.openide.util.lookup.ServiceProvider;
 
 /**
- * The New Graph in Add Mode plugin for the Welcome Page.
+ * The New Graph with a Sphere plugin for the Welcome Page.
  *
  * @author canis_majoris
  */
 
 @ServiceProvider(service = WelcomePageProvider.class)
 @PluginInfo(tags = {"WELCOME"})
-@NbBundle.Messages("AddModeWelcomePlugin=Add Mode Welcome Plugin")
-public class AddModeWelcomePlugin extends WelcomePageProvider {
+@NbBundle.Messages("SphereGraphWelcomePlugin=Sphere Graph Welcome Plugin")
+public class SphereGraphWelcomePlugin extends WelcomePageProvider {
 
     /**
      * Get a unique reference that is used to identify the plugin 
@@ -46,7 +48,7 @@ public class AddModeWelcomePlugin extends WelcomePageProvider {
      */
     @Override
     public String getName() {
-        return AddModeWelcomePlugin.class.getName();
+        return SphereGraphWelcomePlugin.class.getName();
     }
     
     /**
@@ -56,7 +58,7 @@ public class AddModeWelcomePlugin extends WelcomePageProvider {
      */
     @Override
     public String getLinkDescription() {
-        return "Open up a new graph in Add Mode";
+        return "Open up a new graph with a Sphere Network";
     }
     
     /**
@@ -68,14 +70,7 @@ public class AddModeWelcomePlugin extends WelcomePageProvider {
     public String getDescription() {
         StringBuilder buf = new StringBuilder();
         buf.append("<br>");
-        buf.append("Add mode allows you to draw your own graph by clicking on ");
-        buf.append("the background.<br>");
-        buf.append("By connecting on nodes, you can connect them with links.<br>");
-        buf.append("The side menu contains options for toggling whether the links ");
-        buf.append("are directed.<br>");
-        buf.append("When finished drawing, you can toggle the graph back into Selection ");
-        buf.append("Mode by clicking the button on the side menu, changing the attribute ");
-        buf.append("in the Attribute Editor, or by toggling Draw Mode in the Edit Menu.");
+        buf.append("This will open a new graph with nodes arranged in a sphere.");
         return buf.toString();
     }
     
@@ -98,13 +93,22 @@ public class AddModeWelcomePlugin extends WelcomePageProvider {
         final Schema schema = SchemaFactoryUtilities.getSchemaFactory(AnalyticSchemaFactory.ANALYTIC_SCHEMA_ID).createSchema();
         final StoreGraph sg = new StoreGraph(schema);
         schema.newGraph(sg);
-        int drawModeAttribute = VisualConcept.GraphAttribute.DRAWING_MODE.ensure(sg);
-        sg.setBooleanValue(drawModeAttribute, 0, true);
+        
         final Graph dualGraph = new DualGraph(sg, false);
-
+        PluginExecutor.startWith(CoreTestingPluginRegistry.SPHERE_GRAPH_BUILDER)
+                .set(SphereGraphBuilderPlugin.ADD_CHARS_PARAMETER_ID, true)
+                .set(SphereGraphBuilderPlugin.DRAW_MANY_DECORATORS_PARAMETER_ID, true)
+                .set(SphereGraphBuilderPlugin.DRAW_MANY_TX_PARAMETER_ID, true)
+                .set(SphereGraphBuilderPlugin.N_PARAMETER_ID, 100)
+                .set(SphereGraphBuilderPlugin.OPTION_PARAMETER_ID, "Random vertices")
+                .set(SphereGraphBuilderPlugin.T_PARAMETER_ID, 50)
+                .set(SphereGraphBuilderPlugin.USE_ALL_DISPLAYABLE_CHARS_PARAMETER_ID, true)
+                .set(SphereGraphBuilderPlugin.USE_LABELS_PARAMETER_ID, true)
+                .set(SphereGraphBuilderPlugin.USE_RANDOM_ICONS_PARAMETER_ID, true)
+                .followedBy(InteractiveGraphPluginRegistry.RESET_VIEW)
+                .executeWriteLater(dualGraph);
         final String graphName = SchemaFactoryUtilities.getSchemaFactory(AnalyticSchemaFactory.ANALYTIC_SCHEMA_ID).getLabel().replace(" ", "").toLowerCase();
         GraphOpener.getDefault().openGraph(dualGraph, graphName);
-
     }
 
     /**
