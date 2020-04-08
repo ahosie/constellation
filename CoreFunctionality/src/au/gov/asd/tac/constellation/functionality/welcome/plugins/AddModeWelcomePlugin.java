@@ -72,7 +72,7 @@ public class AddModeWelcomePlugin extends WelcomePageProvider {
         buf.append("the background.<br>");
         buf.append("By connecting on nodes, you can connect them with links.<br>");
         buf.append("The side menu contains options for toggling whether the links ");
-        buf.append("are directed.<br>");
+        buf.append("are directed or undirected.<br>");
         buf.append("When finished drawing, you can toggle the graph back into Selection ");
         buf.append("Mode by clicking the button on the side menu, changing the attribute ");
         buf.append("in the Attribute Editor, or by toggling Draw Mode in the Edit Menu.");
