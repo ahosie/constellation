@@ -15,10 +15,6 @@
  */
 package au.gov.asd.tac.constellation.functionality.welcome;
 
-import au.gov.asd.tac.constellation.functionality.CorePluginRegistry;
-import au.gov.asd.tac.constellation.functionality.browser.OpenInBrowserPlugin;
-import au.gov.asd.tac.constellation.functionality.welcome.plugins.AddModeWelcomePlugin;
-import au.gov.asd.tac.constellation.plugins.PluginExecution;
 import au.gov.asd.tac.constellation.security.ConstellationSecurityManager;
 import au.gov.asd.tac.constellation.security.proxy.ProxyUtilities;
 import au.gov.asd.tac.constellation.utilities.BrandingUtilities;

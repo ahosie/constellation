@@ -23,6 +23,7 @@ import au.gov.asd.tac.constellation.plugins.parameters.PluginParameters;
 import au.gov.asd.tac.constellation.plugins.templates.SimpleEditPlugin;
 import java.io.File;
 import javax.swing.JFileChooser;
+import javax.swing.SwingUtilities;
 import org.openide.filesystems.FileUtil;
 import org.openide.loaders.DataObject;
 import org.openide.util.HelpCtx;
@@ -46,25 +47,27 @@ public class OpenFilePlugin extends SimpleEditPlugin {
     
     @Override
     protected void edit(final GraphWriteMethods graph, final PluginInteraction interaction, final PluginParameters parameters) throws InterruptedException, PluginException {
-        if (running) {
-            return;
-        }
-        try {
-            running = true;
-            JFileChooser chooser = prepareFileChooser();
-            File[] files;
-            try {
-                files = chooseFilesToOpen(chooser);
-                currentDirectory = chooser.getCurrentDirectory();
-            } catch (UserCancelException ex) {
+        SwingUtilities.invokeLater(() -> {
+            if (running) {
                 return;
             }
-            for (int i = 0; i < files.length; i++) {
-                OpenFile.openFile(files[i], -1);
+            try {
+                running = true;
+                JFileChooser chooser = prepareFileChooser();
+                File[] files;
+                try {
+                    files = chooseFilesToOpen(chooser);
+                    currentDirectory = chooser.getCurrentDirectory();
+                } catch (UserCancelException ex) {
+                    return;
+                }
+                for (int i = 0; i < files.length; i++) {
+                    OpenFile.openFile(files[i], -1);
+                }
+            } finally {
+                running = false;
             }
-        } finally {
-            running = false;
-        }
+        });
     }
 
     /**

@@ -69,7 +69,6 @@ public abstract class WelcomePageProvider {
      *
      */
     public void run() {
-        return;
     }
 
     /**
