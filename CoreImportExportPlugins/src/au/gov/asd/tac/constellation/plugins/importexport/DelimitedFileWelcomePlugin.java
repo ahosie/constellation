@@ -62,8 +62,8 @@ public class DelimitedFileWelcomePlugin extends WelcomePageProvider {
     public String getDescription() {
         StringBuilder buf = new StringBuilder();
         buf.append("<br>");
-        buf.append("The Delimited File Importer is a way you can transform your tabular ");
-        buf.append("into something that can be represented as a graph.<br>");
+        buf.append("The Delimited File Importer is a tool to import tabular data ");
+        buf.append("into a format that can be represented as a graph.<br>");
         buf.append("Specify whether columns represent source node, destination node, or ");
         buf.append("link/transaction attributes and the table will be imported.");
         return buf.toString();

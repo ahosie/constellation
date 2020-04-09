@@ -186,7 +186,7 @@ public final class WelcomeTopComponent extends TopComponent {
         buf.append(String.format("<style>body{font-size:%spx;}</style>", FontUtilities.getOutputFontSize()));
 
         buf.append("<h2>Welcome to Constellation</h2><br>");
-        buf.append("Constellation is first class domain agnostic visualisation and data analysis ");
+        buf.append("Constellation is a first class domain agnostic visualisation and data analysis ");
         buf.append("application enabling the user to solve large and complex problems ");
         buf.append("in a simple and intuitive way.<br><br>");
         buf.append("Constellation is a graph focused visualisation and data analysis ");
