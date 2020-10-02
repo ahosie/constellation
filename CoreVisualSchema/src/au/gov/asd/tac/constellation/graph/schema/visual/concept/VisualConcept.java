@@ -212,6 +212,10 @@ public class VisualConcept extends SchemaConcept {
                 .setDescription("The identifier of the node")
                 .create()
                 .build();
+        public static final SchemaAttribute RDFIDENTIFIER = new SchemaAttribute.Builder(GraphElementType.VERTEX, StringAttributeDescription.ATTRIBUTE_NAME, "rdf_identifier")
+                .setDescription("The RDF identifier of the node")
+                .create()
+                .build();
         public static final SchemaAttribute LABEL = new SchemaAttribute.Builder(GraphElementType.VERTEX, StringAttributeDescription.ATTRIBUTE_NAME, "Label")
                 .setDescription("The label of the vertex")
                 .create()
@@ -291,6 +295,10 @@ public class VisualConcept extends SchemaConcept {
                 .setDescription("The identifier of the transaction")
                 .create()
                 .build();
+        public static final SchemaAttribute RDFIDENTIFIER = new SchemaAttribute.Builder(GraphElementType.TRANSACTION, StringAttributeDescription.ATTRIBUTE_NAME, "rdf_dentifier")
+                .setDescription("The RDF identifier of the transaction")
+                .create()
+                .build();
         public static final SchemaAttribute LINE_STYLE = new SchemaAttribute.Builder(GraphElementType.TRANSACTION, LineStyleAttributeDescription.ATTRIBUTE_NAME, "line_style")
                 .setDescription("The line style of the transaction")
                 .setDefaultValue(LineStyle.SOLID)
@@ -351,6 +359,7 @@ public class VisualConcept extends SchemaConcept {
         schemaAttributes.add(VertexAttribute.DIMMED);
         schemaAttributes.add(VertexAttribute.FOREGROUND_ICON);
         schemaAttributes.add(VertexAttribute.IDENTIFIER);
+        schemaAttributes.add(VertexAttribute.RDFIDENTIFIER);
         schemaAttributes.add(VertexAttribute.LABEL);
         schemaAttributes.add(VertexAttribute.LABEL_RADIUS);
         schemaAttributes.add(VertexAttribute.NODE_RADIUS);
@@ -367,6 +376,7 @@ public class VisualConcept extends SchemaConcept {
         schemaAttributes.add(TransactionAttribute.DIMMED);
         schemaAttributes.add(TransactionAttribute.DIRECTED);
         schemaAttributes.add(TransactionAttribute.IDENTIFIER);
+        schemaAttributes.add(TransactionAttribute.RDFIDENTIFIER);
         schemaAttributes.add(TransactionAttribute.LINE_STYLE);
         schemaAttributes.add(TransactionAttribute.LABEL);
         schemaAttributes.add(TransactionAttribute.OVERLAY_COLOR);
